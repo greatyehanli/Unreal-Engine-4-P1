@@ -11,4 +11,4 @@ BuildingEscape/Content/StarterContent
 ##########################
 #Visual Studio Files to be Ignored#
 ##########################
-*.VC.db
+*/.vs
