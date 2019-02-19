@@ -2,6 +2,8 @@
 
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -14,16 +16,22 @@ UOpenDoor::UOpenDoor()
 }
 
 
+void UOpenDoor::OpenDoor()
+{
+	//GetOwner（）是bo	
+	AActor* Owner = GetOwner();  // find the owner, 这个class抬头看看，哟！我是Door的一个component，我的owner是Door
+	FRotator NewRotation = FRotator(0.f, -90.f, 0.f); //set rotation factor
+	Owner->SetActorRotation(NewRotation); //start rotating
+}
+
 // Called when the game starts
 void UOpenDoor::BeginPlay()
 {
 
-	AActor* Owner = GetOwner();
-	FRotator NewRotation = FRotator(0.f, -90.f, 0.f);
-	Owner->SetActorRotation(NewRotation);
 	Super::BeginPlay();
 
-	// ...
+	// 从世界里面找第一个Player Controller然后得到操作的小兵，然后把开门和压力板连起来
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 }
 
@@ -33,6 +41,12 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	//一直请求trigger volume, 每一帧都请求
+	//看看是不是有人踩上去了， 如果是，开门
+
+	if (pressurePlate->IsOverlappingActor(ActorThatOpens)) {
+		//看看是不是ActorThatOpens站到了trigger volume上面， returns a bool every frame
+		OpenDoor();
+	}
 }
 

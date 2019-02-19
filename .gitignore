@@ -12,3 +12,4 @@ BuildingEscape/Content/StarterContent
 #Visual Studio Files to be Ignored#
 ##########################
 */.vs
+BuildingEscape/.vs/BuildingEscape/v15/.suo

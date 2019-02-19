@@ -21,11 +21,15 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* pressurePlate;
 
+	UPROPERTY(EditAnywhere)
+	AActor* ActorThatOpens; //pawn 继承了 actor, 所以type的话是AActor也行， APawn也行
+
 public:	
 	// Sets default values for this component's properties
 	UOpenDoor();
 
 protected:
+	void OpenDoor();
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
