@@ -18,10 +18,15 @@ UOpenDoor::UOpenDoor()
 
 void UOpenDoor::OpenDoor()
 {
-	//GetOwner（）是bo	
-	AActor* Owner = GetOwner();  // find the owner, 这个class抬头看看，哟！我是Door的一个component，我的owner是Door
-	FRotator NewRotation = FRotator(0.f, -90.f, 0.f); //set rotation factor
-	Owner->SetActorRotation(NewRotation); //start rotating
+	//FRotator NewRotation = FRotator(0.f, -90.f, 0.f); //set rotation factor
+	Owner->SetActorRotation(FRotator(0.f, openAngle, 0.f)); //start rotating
+}
+
+void UOpenDoor::CloseDoor()
+{
+	//AActor* Owner = GetOwner();  // find the owner, 这个class抬头看看，哟！我是Door的一个component，我的owner是Door
+	//FRotator NewRotation = FRotator(0.f, 90.f, 0.f); //set rotation factor
+	Owner->SetActorRotation(FRotator(0.f, 0.f, 0.f)); //start rotating
 }
 
 // Called when the game starts
@@ -29,6 +34,7 @@ void UOpenDoor::BeginPlay()
 {
 
 	Super::BeginPlay();
+	Owner = GetOwner();  // find the owner, 这个class抬头看看，哟！我是Door的一个component，我的owner是Door
 
 	// 从世界里面找第一个Player Controller然后得到操作的小兵，然后把开门和压力板连起来
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
@@ -47,6 +53,14 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (pressurePlate->IsOverlappingActor(ActorThatOpens)) {
 		//看看是不是ActorThatOpens站到了trigger volume上面， returns a bool every frame
 		OpenDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	}
+
+	//检查是不是不该关门了， 时间到了没有
+	
+	if (LastDoorOpenTime + CloseDelayOfDoor < GetWorld()->GetTimeSeconds())
+	{
+		CloseDoor();
 	}
 }
 
