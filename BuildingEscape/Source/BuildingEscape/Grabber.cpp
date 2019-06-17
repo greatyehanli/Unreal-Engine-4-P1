@@ -66,7 +66,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FHitResult Hit;
 
 	//false是说我们只在乎简单的撞击体积，不是一个物体细节的撞击体积，然后我们要忽略自己，因为
-	//trace光线是从pawn的中心发出来的，不忽略自己的话光线就会第一个撞到自己，也就是defaultPawn
+	//trace光线是从pawn的中心发出来的，不忽略自己的话光线就会第一个撞到自己，也就是defaultPawn，最后一个parameter是actor to ignore，就是GetOwner（）
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
 	GetWorld()->LineTraceSingleByObjectType(
