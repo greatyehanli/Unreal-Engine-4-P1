@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+#include "Components/InputComponent.h"
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
 
@@ -24,9 +26,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	private:
-
+private:
+		//traceline距离是多远在这个float定意
 		float Reach = 100;
+		UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+		UInputComponent* InputComponent = nullptr;
+
+		//拿东西的function，拿人物reach到的东西
+		void Grab();
 		
 };

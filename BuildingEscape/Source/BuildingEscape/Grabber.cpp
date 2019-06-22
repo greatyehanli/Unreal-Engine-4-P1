@@ -25,7 +25,20 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	// ...
+	
+	///我们在这里来configure InputComponent
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+
+	if (InputComponent) {
+
+		UE_LOG(LogTemp, Warning, TEXT("InputComponent found!"));
+
+		//把这个InputComponent和我们在Project Setting -> Input里面定义的Grab绑到一起，当被按下去的时候call Grab function, 用&reference这个是因为我们指向这个function的address直接call了
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("%s is missing Input component"), *GetOwner()->GetName());
+	}
 	
 }
 
@@ -86,5 +99,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	}
 
 
+}
+
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("Grab Key Pressed!"));
 }
 
